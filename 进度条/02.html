@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body{
+            display:flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height:100vh;
+        }
+        .container{
+            text-align:center;
+        }
+        button{
+            width:90px;
+            height:34px;
+            border-radius:10px;
+            margin:15px;
+            color:white;
+            background:#3498db;
+            font-size:18px;
+            border:none;
+            cursor: pointer;
+        }
+        .progress-container{
+            position:relative;
+            display:flex;
+            justify-content: space-between;
+            width:350px;
+            max-width:100%;
+            margin-bottom:30px;
+            overflow:hidden;
+        }
+        .circle{
+            display:flex;
+            align-items: center;
+            justify-content: center;
+            border:2px solid #e0e0e0;
+            width:30px;
+            height:30px;
+            border-radius:50%;
+            background:white;
+            z-index:3;
+            transition: all 0.4s ease;
+        }
+        .line{
+            position:absolute;
+            height:4px;
+            width:0%;
+            background-color:#3498db;
+            left:0px;
+            top:50%;
+            z-index:1;
+            transition: all 0.4s;
+        }
+        .progress-container::before{
+            content: '';
+            position:absolute;
+            height:4px;
+            width:100%;
+            left:0px;
+            top:50%;
+            background:#e0e0e0;
+            z-index:-2;
+        }
+        .active{
+            border:2px solid #3498db
+        }
+        .btn:disabled{
+            background:#e0e0e0;
+            cursor: no-drop;
+        }
+    </style>    
+</head>
+<body>
+    <div class="container">
+        <div class="progress-container">
+            <div class="line"></div>
+            <div class="circle active">1</div>
+            <div class="circle">2</div>
+            <div class="circle">3</div>
+            <div class="circle">4</div>
+        </div>
+        <button class="btn" id="prev"disabled>prev</button>
+        <button class="btn" id='next'>next</button>
+    </div>
+
+    <script>
+
+
+        function updata(){
+            circle.forEach((value,key) => {
+                if(key < count){
+                    value.classList.add('active')
+                }
+                else{
+                    value.classList.remove('active')
+                }
+            })
+            
+            const active = document.querySelectorAll('.active')
+
+            line.style.width = (active.length - 1) / (circle.length - 1) * 100 + '%';
+
+            if(count ==1){
+                prev.disabled = true
+            }
+            else if(count == circle.length){
+                next.disabled = true
+            }
+            else{
+                prev.disabled = false
+                next.disabled = false
+            }
+        }
+
+        let count = 1
+
+        const container= document.querySelector('.container')
+        const circle = document.querySelectorAll('.circle')
+        const next = document.getElementById('next')
+        const prev = document.getElementById('prev')
+        const line = document.querySelector('.line')
+
+        container.addEventListener('click',event => {  
+            if(event.target.id === 'next'){
+                count ++ 
+                if(count > circle.length){
+                    count = circle.length
+                }
+                updata()
+            }
+
+            if(event.target.id === 'prev'){
+                count --
+                if(count < 1){
+                    count = 1
+                }
+                updata()
+            }
+        })
+
+        
+    </script>
+</body>
+</html>
