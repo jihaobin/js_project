@@ -1,0 +1,83 @@
+* {
+  margin: 0px;
+  padding: 0px;
+}
+
+body {
+  height: 100vh;
+  display: flex;
+  overflow: hidden;
+}
+body div {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  transition: all 0.5 ease;
+  background-size: center;
+  background-repeat: no-repeat;
+  transition: all 1000ms ease-in-out;
+}
+
+.left {
+  background: url("../img/ps.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+.left::before {
+  content: "";
+  width: 100%;
+  height: 100%;
+  background-color: rgba(87, 84, 236, 0.7);
+}
+
+.right {
+  background: url("../img/xbox.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+.right::before {
+  content: "";
+  width: 100%;
+  height: 100%;
+  background-color: rgba(43, 43, 43, 0.8);
+}
+
+h1 {
+  position: absolute;
+  white-space: nowrap;
+  transform: translateX(-50%);
+  top: 20%;
+  left: 50%;
+  color: white;
+  font-size: 4rem;
+}
+
+a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  left: 50%;
+  top: 40%;
+  width: 15rem;
+  padding: 1.5rem;
+  transform: translateX(-50%);
+  background-color: transparent;
+  border: #fff solid 0.2rem;
+  text-decoration: none;
+  color: white;
+  font-weight: bold;
+}
+
+.left:hover {
+  flex: 3;
+}
+
+.right:hover {
+  flex: 3;
+}/*# sourceMappingURL=style.css.map */
