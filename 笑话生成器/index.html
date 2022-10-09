@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="css/style.css" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div class="container">
+      <h3>Don't Laugh Challenge</h3>
+      <div id="joke">//Joke gose here</div>
+      <button id="jokeBtn" class="btn">Get Another Joke</button>
+    </div>
+
+    <script async src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+      const joke = document.getElementById("joke");
+
+      document.addEventListener("click", async (event) => {
+        if (!(event.target.tagName === "BUTTON")) {
+          return;
+        }
+        let temp = await axios({
+          method: "GET",
+          url: "https://icanhazdadjoke.com",
+          headers: {
+            Accept: "application/json",
+          },
+        });
+        // console.log(temp);
+        joke.innerHTML = temp.data.joke;
+      });
+    </script>
+  </body>
+</html>
