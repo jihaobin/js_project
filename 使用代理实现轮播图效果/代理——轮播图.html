@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0px;
+        padding: 0px;
+      }
+      .container {
+        width: 50vw;
+        height: 50vh;
+        margin: 20px auto 0;
+        background-color: pink;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .prev,
+      .next {
+        width: 40%;
+        height: 100%;
+        background-color: skyblue;
+        position: absolute;
+        z-index: 999;
+        opacity: 0;
+      }
+      .prev {
+        left: 0px;
+      }
+      .next {
+        right: 0px;
+      }
+      .img {
+        width: 60%;
+        height: 60%;
+        position: absolute;
+        opacity: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 32px;
+        background-color: greenyellow;
+        transition: all 0.3s;
+      }
+      .left {
+        opacity: 1;
+        transform: translateX(-30%);
+      }
+      .show {
+        opacity: 1;
+        transform: scale(1.3);
+        z-index: 99;
+      }
+      .right {
+        opacity: 1;
+        transform: translateX(30%);
+      }
+      ul {
+        position: absolute;
+        bottom: 10px;
+        min-width: 100%;
+        list-style: none;
+        display: flex;
+        justify-content: space-evenly;
+        z-index: 9999;
+      }
+      li {
+        width: 20px;
+        height: 20px;
+        background-color: skyblue;
+        border-radius: 50%;
+        cursor: pointer;
+      }
+      li:hover {
+        background: lightgreen;
+      }
+      .active {
+        background: red;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <button class="prev"></button>
+      <button class="next"></button>
+
+      <div class="img left">1</div>
+      <div class="img show">2</div>
+      <div class="img right">3</div>
+      <div class="img">4</div>
+      <div class="img">5</div>
+      <div class="img">7</div>
+      <div class="img">8</div>
+      <div class="img">9</div>
+      <div class="img">10</div>
+
+      <ul>
+        <li class="active"></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+      </ul>
+    </div>
+
+    <script>
+      const imgs = document.querySelectorAll(".img");
+      const lists = document.querySelectorAll("li");
+      const Swiper = (imgs) => {
+        const len = imgs.length - 1;
+        let start = 0;
+        const index = new Proxy(
+          { value: null },
+          {
+            set(target, valuekey, newvalue) {
+              //节流函数设置每300ms点击才有效
+              if (Date.now() - start < 300) return false;
+              start = Date.now();
+              if (newvalue < 0) newvalue = len;
+              if (newvalue > len) newvalue = 0;
+              const main = {
+                left: imgs[newvalue - 1] || imgs[len], // 获取左边偏移的元素(前一个元素)
+                show: imgs[newvalue], //获取展示的元素(中间的元素)
+                right: imgs[newvalue + 1] || imgs[0], // 获取右边偏移的元素(右边的元素)
+              };
+              //删除旧索引对应的元素的 左偏移 show 右偏移
+              //给新索引添加对应的元素的 左偏移 show 右偏移
+
+              document.querySelector(".active")?.classList.remove("active");
+              lists[newvalue].classList.add("active");
+
+              Object.keys(main).forEach((item) => {
+                document.querySelector(`.${item}`)?.classList.remove(item);
+                main[item]?.classList.add(item);
+              });
+
+              return Reflect.set(target, valuekey, newvalue);
+            },
+          }
+        );
+        return {
+          next: () => index.value++,
+          prev: () => index.value--,
+          change: (start) => {
+            index.value = start;
+          },
+        };
+      };
+      const swiper = Swiper(imgs);
+
+      //   setInterval(swiper.next, 200);
+      document.querySelector(".prev").onclick = swiper.prev;
+      document.querySelector(".next").onclick = swiper.next;
+
+      lists.forEach((item, index) => {
+        item.onclick = swiper.change.bind(null, index);
+      });
+    </script>
+  </body>
+</html>
